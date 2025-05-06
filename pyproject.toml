@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "interface-audio-difficulty"
+version = "0.1.0"
+description = ""
+authors = ["PRamoneda <PRamoneda@github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+gradio = "^5.29.0"
+pydub = "^0.25.1"
+yt-dlp = "^2025.4.30"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
