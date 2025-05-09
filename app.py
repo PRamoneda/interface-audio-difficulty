@@ -63,11 +63,11 @@ def process_input(input_audio, youtube_url):
 
 
 demo = gr.Interface(
-    fn=process_input,
-    inputs=[
-        gr.Audio(label="Upload MP3", type="filepath"),
-        gr.Textbox(label="YouTube URL")
-    ],
+        fn=process_input,
+        inputs=[
+            gr.Audio(label="Upload MP3", type="filepath"),
+            gr.Textbox(label="YouTube URL")
+        ],
     outputs=[
         gr.Textbox(label="Difficulty predictions"),
         gr.File(label="Generated MIDI"),

@@ -210,7 +210,7 @@ class AudioModel(nn.Module):
         # pdb.set_trace()
         x = self.conv_layers(x1)
         # Reshape for GRU input
-        x = x.flatten(-2).transpose(1, 2)  # Reshaping to [batch, seq_len, features]
+        x = x.flatten(-2)  # Reshaping to [batch, seq_len, features]
         # print(x.shape)
         # GRU part
         # print(x.shape)
