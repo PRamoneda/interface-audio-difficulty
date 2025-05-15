@@ -2,16 +2,11 @@ import json
 import math
 import os
 from statistics import mean, stdev
-
-import numpy as np
 import torch
 from sklearn.metrics import mean_squared_error, balanced_accuracy_score
 from torch import nn
 from torch.nn import functional as F
-from collections import OrderedDict
-import collections
 import utils
-import pdb
 from utils import prediction2label
 from scipy.stats import kendalltau
 
@@ -59,7 +54,6 @@ class ContextAttention(nn.Module):
     def get_attention(self, x):
         attention = self.attention_net(x)
         attention_tanh = torch.tanh(attention)
-        # attention_split = torch.cat(attention_tanh.split(split_size=self.head_size, dim=2), dim=0)
         attention_split = torch.stack(attention_tanh.split(split_size=self.head_size, dim=2), dim=0)
         similarity = torch.bmm(attention_split.view(self.num_head, -1, self.head_size), self.context_vector)
         similarity = similarity.view(self.num_head, x.shape[0], -1).permute(1, 2, 0)
@@ -167,7 +161,6 @@ class multimodal_cnns(nn.Module):
             x_midi = torch.zeros_like(x_midi, device=x_midi.device)
         elif self.only_pr:
             x_audio = torch.zeros_like(x_audio, device=x_audio.device)
-        pdb.set_trace()
         x_midi_trimmed = x_midi[:, :, :x_audio.size(2)]
 
         cnns_out = torch.cat((x_midi_trimmed, x_audio), 1)

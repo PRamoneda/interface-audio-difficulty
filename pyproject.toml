@@ -10,7 +10,13 @@ python = "^3.10"
 gradio = "^5.29.0"
 pydub = "^0.25.1"
 yt-dlp = "^2025.4.30"
-
+librosa = "0.9.2"
+pretty_midi = "^0.2.10"
+ffmpeg-python = "^0.2.0"
+scipy = "^1.13.0"
+torch = "^2.2.0"
+piano-transcription-inference = "^0.0.6"
+seaborn = "^0.13.2"
 
 [build-system]
 requires = ["poetry-core"]

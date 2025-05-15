@@ -8,7 +8,6 @@ import numpy as np
 import librosa
 from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
 import pretty_midi
-import soundfile as sf
 from utils import prediction2label
 from model import AudioModel
 from scipy.signal import resample
@@ -100,8 +99,8 @@ def predict_difficulty(mp3_path, model_name, rep):
             pred = prediction2label(logits).item()
             preds.append(pred)
 
-    # return mean(preds)
-    return preds
+    return mean(preds)
+    # return preds
 
 if __name__ == "__main__":
     mp3_path = "yt_audio.mp3"
