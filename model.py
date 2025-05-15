@@ -34,7 +34,7 @@ class ordinal_loss(nn.Module):
             return 0
         # loss
         if self.weights is not None:
-            # pdb.set_trace()
+
             return torch.sum((self.weights * F.mse_loss(predictions, modified_target, reduction="none")).mean(axis=1))
         else:
             return torch.sum((F.mse_loss(predictions, modified_target, reduction="none")).mean(axis=1))
@@ -160,19 +160,17 @@ class multimodal_cnns(nn.Module):
 
     def forward(self, x):
         x_midi, x_audio = x
-        # print("input", x_midi.shape, x_audio.shape)
-        x_midi = self.midi_branch(x_midi)
-        x_audio = self.audio_branch(x_audio)
+        x_midi = self.midi_branch(x_midi).squeeze(-1)
+        x_audio = self.audio_branch(x_audio).squeeze(-1)
         # do a modality dropout
         if self.only_cqt:
             x_midi = torch.zeros_like(x_midi, device=x_midi.device)
         elif self.only_pr:
             x_audio = torch.zeros_like(x_audio, device=x_audio.device)
-        # print(x_midi.shape, x_audio.shape)
-        x_midi_trimmed = x_midi[:, :, :x_audio.size(2), :]
+        pdb.set_trace()
+        x_midi_trimmed = x_midi[:, :, :x_audio.size(2)]
 
         cnns_out = torch.cat((x_midi_trimmed, x_audio), 1)
-
         return cnns_out
 
 
@@ -207,12 +205,10 @@ class AudioModel(nn.Module):
     def forward(self, x1, kk):
         # Applying Convolutional Block
         # print(x1.shape)
-        # pdb.set_trace()
+
         x = self.conv_layers(x1)
         # Reshape for GRU input
-        x = x.flatten(-2)  # Reshaping to [batch, seq_len, features]
-        # print(x.shape)
-        # GRU part
+        x = x.squeeze().transpose(0, 1).unsqueeze(0) # Reshaping to [batch, seq_len, features]
         # print(x.shape)
         x, _ = self.gru(x)
         # Attention
@@ -269,7 +265,7 @@ def compute_model_basic(model_name, rep, modality_dropout, only_cqt=False, only_
             checkpoint = torch.load(f"models/{model_name}/checkpoint_{split}.pth",  map_location='cuda:0')
             # print(checkpoint["epoch"])
             # print(checkpoint.keys())
-            # pdb.set_trace()
+
             model.load_state_dict(checkpoint['model_state_dict'])
             model = model.cuda()
             pred_labels, true_labels = [], []
@@ -293,10 +289,10 @@ def compute_model_basic(model_name, rep, modality_dropout, only_cqt=False, only_
                         "true": ps,
                         "pred": pred
                     }
-                    # pdb.set_trace()
+
                     true_labels.append(ps)
                     pred_labels.append(pred)
-            # pdb.set_trace()
+
             predictions.append(predictions_split)
             mse.append(get_mse_macro(true_labels, pred_labels))
             acc.append(balanced_accuracy_score(true_labels, pred_labels))

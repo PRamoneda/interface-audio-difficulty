@@ -3,9 +3,6 @@ from get_difficulty import predict_difficulty
 import tempfile
 import os
 from pydub import AudioSegment
-
-
-
 import yt_dlp
 
 def download_youtube_audio(url):
@@ -27,7 +24,6 @@ def download_youtube_audio(url):
 
     return "yt_audio.mp3"
 
-
 def process_input(input_audio, youtube_url):
     if youtube_url:
         audio_path = download_youtube_audio(youtube_url)
@@ -46,7 +42,7 @@ def process_input(input_audio, youtube_url):
 
     diff_cqt = predict_difficulty(audio_path, model_name=model_cqt, rep="cqt5")
     diff_pr = predict_difficulty(audio_path, model_name=model_pr, rep="pianoroll5")
-    diff_multi = predict_difficulty(audio_path, model_name=model_multi, rep="multimodal5")
+    # diff_multi = predict_difficulty(audio_path, model_name=model_multi, rep="multimodal5")
 
     # Assumes predict_difficulty generates 'temp.mid'
     midi_path = "temp.mid"
@@ -55,8 +51,8 @@ def process_input(input_audio, youtube_url):
 
     return (
         f"CQT difficulty: {diff_cqt}\n"
-        f"Pianoroll difficulty: {diff_pr}\n"
-        f"Multimodal difficulty: {diff_multi}",
+        f"Pianoroll difficulty: {diff_pr}\n",
+        # f"Multimodal difficulty: {diff_multi}",
         midi_path,
         midi_path
     )
